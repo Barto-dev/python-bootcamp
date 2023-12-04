@@ -61,8 +61,8 @@ while is_coffee_machine_on:
         print_report(resources, profit)
     else:
         drink = MENU[choice]
-        is_enough_money = is_resource_sufficient(resources, drink["ingredients"])
-        if is_enough_money:
+        is_enough_resources = is_resource_sufficient(resources, drink["ingredients"])
+        if is_enough_resources:
             payment = process_coins()
             if is_transaction_successful(payment, drink["cost"]):
                 make_coffee(choice, drink["ingredients"])
