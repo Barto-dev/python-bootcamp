@@ -3,7 +3,7 @@ from random import randint, choice
 
 COLORS = ["red", "orange", "yellow", "green", "blue", "purple"]
 STARTING_MOVE_DISTANCE = 5
-MOVE_INCREMENT = 10
+MOVE_INCREMENT = 1
 
 
 class CarManager:
@@ -34,5 +34,8 @@ class CarManager:
 
     def has_collision_with_turtle(self, turtle):
         for car in self.all_cars:
-            if car.distance(turtle) < 35:
+            if car.distance(turtle) < 20:
                 return True
+
+    def level_up(self):
+        self.car_speed += MOVE_INCREMENT

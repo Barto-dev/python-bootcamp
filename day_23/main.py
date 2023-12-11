@@ -11,6 +11,7 @@ screen.listen()
 
 timmy = Player()
 cars = CarManager()
+scoreboard = Scoreboard()
 
 screen.onkey(fun=timmy.go_up, key="Up")
 
@@ -21,8 +22,15 @@ while game_is_on:
     cars.move_cars()
     cars.remove_offscreen_cars()
 
+    if timmy.has_reached_finish():
+        timmy.go_to_start()
+        scoreboard.increase_level()
+        scoreboard.update_score()
+        cars.level_up()
+
     if cars.has_collision_with_turtle(timmy):
         game_is_on = False
+        scoreboard.game_over()
 
     screen.update()
 
