@@ -25,10 +25,7 @@ while is_game_on:
     ).title()
 
     if answer_state == "Exit":
-        missing_states = []
-        for state in all_states:
-            if state not in guesses:
-                missing_states.append(state)
+        missing_states = [state for state in all_states if state not in guesses]
         new_data = pandas.DataFrame(missing_states, columns=["state"])
         new_data.to_csv("states_to_learn.csv", index=False)
         break
