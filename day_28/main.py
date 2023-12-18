@@ -12,8 +12,17 @@ LONG_BREAK_MIN = 20
 CHECKMARK = "✔"
 
 reps = 0
+timer = None
+
 
 # ---------------------------- TIMER RESET ------------------------------- #
+def reset_timer():
+    window.after_cancel(timer)
+    canvas.itemconfig(timer_text, text="00:00")
+    title.config(text="Timer", fg=GREEN)
+    checkmark.config(text="")
+    global reps
+    reps = 0
 
 
 # ---------------------------- TIMER MECHANISM ------------------------------- #
@@ -35,11 +44,6 @@ def start_time():
 
 
 # ---------------------------- COUNTDOWN MECHANISM ------------------------------- #
-def update_checkmarks():
-    marks = ""
-    for _ in range(reps // 2):
-        marks += CHECKMARK
-    checkmark.config(text=marks)
 
 
 def format_time(time):
@@ -54,7 +58,8 @@ def count_down(count):
     count_text = format_time(count)
     canvas.itemconfig(timer_text, text=count_text)
     if count > 0:
-        window.after(1000, count_down, count - 1)
+        global timer
+        timer = window.after(1000, count_down, count - 1)
     else:
         start_time()
         update_checkmarks()
@@ -65,6 +70,13 @@ window = Tk()
 window.title("Pomodoro")
 window.config(padx=100, pady=50, bg=YELLOW)
 window.eval("tk::PlaceWindow . center")
+
+
+def update_checkmarks():
+    marks = ""
+    for _ in range(reps // 2):
+        marks += CHECKMARK
+    checkmark.config(text=marks)
 
 
 def create_button(text, column, row, **kwargs):
@@ -82,7 +94,7 @@ def create_label(text, column, row, **kwargs):
 title = create_label("Timer", column=1, row=0, font=(FONT_NAME, 40, "bold"))
 checkmark = create_label(text="", column=1, row=3, font=(FONT_NAME, 20, "bold"))
 start_button = create_button("Start", column=0, row=2, command=start_time)
-reset_button = create_button("Reset", column=2, row=2)
+reset_button = create_button("Reset", column=2, row=2, command=reset_timer)
 
 canvas = Canvas(width=200, height=224, bg=YELLOW, highlightthickness=0)
 tomato_img = PhotoImage(file="tomato.png")
