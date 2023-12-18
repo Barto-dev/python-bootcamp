@@ -13,9 +13,28 @@ CHECKMARK = "✔"
 
 # ---------------------------- TIMER RESET ------------------------------- #
 
+
 # ---------------------------- TIMER MECHANISM ------------------------------- #
+def start_time():
+    count_down(WORK_MIN * 60)
+
 
 # ---------------------------- COUNTDOWN MECHANISM ------------------------------- #
+
+def format_time(time):
+    minutes = time // 60
+    seconds = time % 60
+    if seconds < 10:
+        seconds = f"0{seconds}"
+    return f"{minutes}:{seconds}"
+
+
+def count_down(count):
+    count_text = format_time(count)
+    canvas.itemconfig(timer_text, text=count_text)
+    if count > 0:
+        window.after(1000, count_down, count - 1)
+
 
 # ---------------------------- UI SETUP ------------------------------- #
 window = Tk()
@@ -38,13 +57,15 @@ def create_label(text, column, row, **kwargs):
 
 title = create_label("Timer", column=1, row=0, font=(FONT_NAME, 40, "bold"))
 checkmark = create_label(CHECKMARK, column=1, row=3, font=(FONT_NAME, 20, "bold"))
-start_button = create_button("Start", column=0, row=2)
+start_button = create_button("Start", column=0, row=2, command=start_time)
 reset_button = create_button("Reset", column=2, row=2)
 
 canvas = Canvas(width=200, height=224, bg=YELLOW, highlightthickness=0)
 tomato_img = PhotoImage(file="tomato.png")
 canvas.create_image(100, 112, image=tomato_img)
-canvas.create_text(100, 130, text="00:00", fill="white", font=(FONT_NAME, 35, "bold"))
+timer_text = canvas.create_text(
+    100, 130, text="00:00", fill="white", font=(FONT_NAME, 35, "bold")
+)
 canvas.grid(column=1, row=1)
 
 window.mainloop()
