@@ -35,6 +35,11 @@ def start_time():
 
 
 # ---------------------------- COUNTDOWN MECHANISM ------------------------------- #
+def update_checkmarks():
+    marks = ""
+    for _ in range(reps // 2):
+        marks += CHECKMARK
+    checkmark.config(text=marks)
 
 
 def format_time(time):
@@ -52,6 +57,7 @@ def count_down(count):
         window.after(1000, count_down, count - 1)
     else:
         start_time()
+        update_checkmarks()
 
 
 # ---------------------------- UI SETUP ------------------------------- #
@@ -74,7 +80,7 @@ def create_label(text, column, row, **kwargs):
 
 
 title = create_label("Timer", column=1, row=0, font=(FONT_NAME, 40, "bold"))
-checkmark = create_label(CHECKMARK, column=1, row=3, font=(FONT_NAME, 20, "bold"))
+checkmark = create_label(text="", column=1, row=3, font=(FONT_NAME, 20, "bold"))
 start_button = create_button("Start", column=0, row=2, command=start_time)
 reset_button = create_button("Reset", column=2, row=2)
 
