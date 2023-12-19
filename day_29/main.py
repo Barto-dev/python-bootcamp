@@ -1,4 +1,5 @@
 from tkinter import *
+from tkinter import messagebox
 
 BG = "white"
 
@@ -18,9 +19,21 @@ def save_password():
     email = email_input.get()
     password = password_input.get()
 
-    with open("data.csv", "a") as file:
-        file.write(f"{website},{email},{password}\n")
-    clear_inputs()
+    if len(email) == 0 or len(website) == 0 or len(password) == 0:
+        messagebox.showerror(
+            title="Oops", message="Please don't leave any fields empty!"
+        )
+        return
+
+    is_ok = messagebox.askokcancel(
+        title=website,
+        message=f"These are the details entered: \nEmail: {email} \nPassword: {password} \n Is it ok to save?",
+    )
+
+    if is_ok:
+        with open("data.csv", "a") as file:
+            file.write(f"{website},{email},{password}\n")
+        clear_inputs()
 
 
 # ---------------------------- UI SETUP ------------------------------- #
@@ -47,7 +60,6 @@ def create_button(text, width, column, row, columnspan=1, **kwargs):
 window = Tk()
 window.title("Password Manager")
 window.config(padx=40, pady=40)
-window.eval("tk::PlaceWindow . center")
 
 canvas = Canvas(width=200, height=200, highlightthickness=0)
 logo = PhotoImage(file="logo.png")
@@ -67,7 +79,9 @@ password_label = create_label(text="Password: ", column=0, row=3)
 password_input = create_entry(22, column=1, row=3)
 generate_button = create_button(text="Generate Password", width=14, column=2, row=3)
 
-add_button = create_button(text="Add", width=37, column=1, row=4, columnspan=2, command=save_password)
+add_button = create_button(
+    text="Add", width=37, column=1, row=4, columnspan=2, command=save_password
+)
 
 
 window.mainloop()
