@@ -4,7 +4,24 @@ BG = "white"
 
 # ---------------------------- PASSWORD GENERATOR ------------------------------- #
 
+
 # ---------------------------- SAVE PASSWORD ------------------------------- #
+
+
+def clear_inputs():
+    website_input.delete(0, END)
+    password_input.delete(0, END)
+
+
+def save_password():
+    website = website_input.get()
+    email = email_input.get()
+    password = password_input.get()
+
+    with open("data.csv", "a") as file:
+        file.write(f"{website},{email},{password}\n")
+    clear_inputs()
+
 
 # ---------------------------- UI SETUP ------------------------------- #
 
@@ -50,7 +67,7 @@ password_label = create_label(text="Password: ", column=0, row=3)
 password_input = create_entry(22, column=1, row=3)
 generate_button = create_button(text="Generate Password", width=14, column=2, row=3)
 
-add_button = create_button(text="Add", width=37, column=1, row=4, columnspan=2)
+add_button = create_button(text="Add", width=37, column=1, row=4, columnspan=2, command=save_password)
 
 
 window.mainloop()
