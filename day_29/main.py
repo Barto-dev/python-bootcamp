@@ -1,9 +1,16 @@
 from tkinter import *
 from tkinter import messagebox
+from day_5.password_generator import generate_password
 
 BG = "white"
 
 # ---------------------------- PASSWORD GENERATOR ------------------------------- #
+
+
+def generate_password_and_insert():
+    password = generate_password(10, 2, 2)
+    password_input.delete(0, END)
+    password_input.insert(END, password)
 
 
 # ---------------------------- SAVE PASSWORD ------------------------------- #
@@ -77,7 +84,7 @@ email_input.insert(END, "example@mail.com")
 
 password_label = create_label(text="Password: ", column=0, row=3)
 password_input = create_entry(22, column=1, row=3)
-generate_button = create_button(text="Generate Password", width=14, column=2, row=3)
+generate_button = create_button(text="Generate Password", width=14, column=2, row=3, command=generate_password_and_insert)
 
 add_button = create_button(
     text="Add", width=37, column=1, row=4, columnspan=2, command=save_password
