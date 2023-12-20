@@ -48,6 +48,43 @@ def save_password():
             clear_inputs()
 
 
+# ---------------------------- PASSWORD GENERATOR ------------------------------- #
+
+
+def load_data():
+    try:
+        with open("data.json", "r") as file:
+            return json.load(file)
+    except FileNotFoundError:
+        messagebox.showerror(title="Error", message="No Data File Found")
+        return None
+    except json.decoder.JSONDecodeError:
+        messagebox.showerror(title="Error", message="Invalid Data File")
+        return None
+
+
+def find_password(data, website):
+    return data.get(website)
+
+
+def display_password(website, password_data):
+    if password_data:
+        message = (
+            f"Email: {password_data['email']}\nPassword: {password_data['password']}"
+        )
+        messagebox.showinfo(title=website, message=message)
+    else:
+        messagebox.showerror(title="Error", message="No Data Found")
+
+
+def search_password():
+    entered_website = website_input.get()
+    data = load_data()
+    if data:
+        password_data = find_password(data, entered_website)
+        display_password(entered_website, password_data)
+
+
 # ---------------------------- UI SETUP ------------------------------- #
 
 
@@ -79,8 +116,12 @@ canvas.create_image(100, 100, image=logo)
 canvas.grid(column=1, row=0, pady=(0, 20))
 
 website_label = create_label(text="Website: ", column=0, row=1)
-website_input = create_entry(width=40, column=1, row=1, columnspan=2)
+website_input = create_entry(width=22, column=1, row=1)
 website_input.focus()
+
+search_button = create_button(
+    text="Search", width=14, column=2, row=1, command=search_password
+)
 
 email_label = create_label(text="Email/Username: ", column=0, row=2)
 email_input = create_entry(40, column=1, row=2, columnspan=2)
