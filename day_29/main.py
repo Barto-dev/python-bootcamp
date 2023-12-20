@@ -1,6 +1,7 @@
 from tkinter import *
 from tkinter import messagebox
 from day_5.password_generator import generate_password
+import json
 
 BG = "white"
 
@@ -27,22 +28,24 @@ def save_password():
     website = website_input.get()
     email = email_input.get()
     password = password_input.get()
+    new_data = {website: {"email": email, "password": password}}
 
     if len(email) == 0 or len(website) == 0 or len(password) == 0:
         messagebox.showerror(
             title="Oops", message="Please don't leave any fields empty!"
         )
-        return
-
-    is_ok = messagebox.askokcancel(
-        title=website,
-        message=f"These are the details entered: \nEmail: {email} \nPassword: {password} \n Is it ok to save?",
-    )
-
-    if is_ok:
-        with open("data.csv", "a") as file:
-            file.write(f"{website},{email},{password}\n")
-        clear_inputs()
+    else:
+        try:
+            with open("data.json", "r") as file:
+                data = json.load(file)
+        except FileNotFoundError:
+            with open("data.json", "w") as file:
+                json.dump(new_data, file, indent=4)
+        else:
+            data.update(new_data)
+            with open("data.json", "w") as file:
+                json.dump(data, file, indent=4)
+            clear_inputs()
 
 
 # ---------------------------- UI SETUP ------------------------------- #
