@@ -28,7 +28,6 @@ class FlashCardApp:
         try:
             return pandas.read_csv(file_name).to_dict(orient="records")
         except FileNotFoundError:
-            logging.exception("File not found, loading default data")
             return pandas.read_csv("data/french_words.csv").to_dict(orient="records")
 
     def save_data(self, file_name="data/words_to_learn.csv"):
