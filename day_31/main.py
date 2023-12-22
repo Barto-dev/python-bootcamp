@@ -5,7 +5,15 @@ from random import choice
 BACKGROUND_COLOR = "#B1DDC6"
 FONT = "Arial"
 
-data = pandas.read_csv("data/french_words.csv")
+
+def load_data():
+    try:
+        return pandas.read_csv("data/words_to_learn.csv")
+    except FileNotFoundError:
+        return pandas.read_csv("data/french_words.csv")
+
+
+data = load_data()
 to_learn = data.to_dict(orient="records")
 current_card = {}
 
@@ -19,6 +27,13 @@ def next_card():
     canvas.itemconfig(card_word, text=current_card["French"], fill="black")
     canvas.itemconfig(card_background, image=card_front_img)
     flip_timer = window.after(3000, func=flip_card)
+
+
+def is_known():
+    to_learn.remove(current_card)
+    data = pandas.DataFrame(to_learn)
+    data.to_csv("data/words_to_learn.csv", index=False)
+    next_card()
 
 
 def flip_card():
@@ -50,7 +65,7 @@ unknown_button.grid(row=1, column=0)
 
 check_img = PhotoImage(file="images/right.png")
 known_button = Button(
-    image=check_img, highlightthickness=0, borderwidth=0, command=next_card
+    image=check_img, highlightthickness=0, borderwidth=0, command=is_known
 )
 known_button.grid(row=1, column=1)
 
